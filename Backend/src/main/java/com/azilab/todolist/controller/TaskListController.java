@@ -16,6 +16,7 @@ import com.azilab.todolist.model.Task;
 import com.azilab.todolist.model.TaskList;
 import com.azilab.todolist.model.User;
 import com.azilab.todolist.service.TaskListService;
+import com.azilab.todolist.service.UserService;
 
 @RestController
 public class TaskListController {
@@ -23,11 +24,22 @@ public class TaskListController {
 	@Autowired
 	private TaskListService taskListService;
 	
+	@Autowired
+	private UserService userService;
+	
 	// CREATE
 	
-	@PostMapping("/tasklist")
-	public TaskList createTaskList(@RequestBody TaskList taskList) {
-		return taskListService.saveTaskList(taskList);
+	@PostMapping("/tasklist/{userId}")
+	public TaskList createTaskList(@PathVariable("userId") final Long userId, @RequestBody TaskList taskList) {
+		Optional<User> user = userService.getUser(userId);
+		
+		if(user.isPresent()) {
+			taskList.setMUser(user.get());
+			return taskListService.saveTaskList(taskList);
+		} else {
+			return null;
+		}
+
 	}
 	
 	// READ

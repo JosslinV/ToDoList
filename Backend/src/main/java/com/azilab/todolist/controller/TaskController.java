@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.azilab.todolist.model.Task;
 import com.azilab.todolist.model.TaskList;
+import com.azilab.todolist.service.TaskListService;
 import com.azilab.todolist.service.TaskService;
 
 @RestController
@@ -21,21 +22,31 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 	
+	@Autowired
+	private TaskListService taskListService;
+	
 	// CREATE
 	
-	@PostMapping("/tasklist")
-	public Task createTask(@RequestBody Task task) {
-		return taskService.saveTask(task);
+	@PostMapping("/task/{taskListId}")
+	public Task createTask(@PathVariable("taskListId") final Long taskListId, @RequestBody Task task) {
+		Optional<TaskList> taskList = taskListService.getTaskList(taskListId);
+		
+		if(taskList.isPresent()) {
+			task.setMTaskList(taskList.get());
+			return taskService.saveTask(task);
+		} else {
+			return null;
+		}
 	}
 	
 	// READ
 	
-	@GetMapping("/tasklist")
+	@GetMapping("/task")
 	public Iterable<Task> getTasks() {
 		return taskService.getTasks();
 	}
 	
-	@GetMapping("/tasklist/{id}")
+	@GetMapping("/task/{id}")
 	public Task getTaskById(@PathVariable("id") final Long id) {
 		Optional<Task> task = taskService.getTask(id);
 		
@@ -48,7 +59,7 @@ public class TaskController {
 	
 	// UPDATE
 	
-	@PutMapping("/tasklist/{id}")
+	@PutMapping("/task/{id}")
 	public Task updateTask(@PathVariable("id") final Long id, @RequestBody Task task) {
 		Optional<Task> u = taskService.getTask(id);
 		if(u.isPresent()) {
@@ -77,7 +88,7 @@ public class TaskController {
 	}
 	// DELETE
 
-	@DeleteMapping("/tasklist/{id}")
+	@DeleteMapping("/task/{id}")
 	public void deleteTask(@PathVariable("id") final Long id) {
 		taskService.deleteTask(id);
 	}

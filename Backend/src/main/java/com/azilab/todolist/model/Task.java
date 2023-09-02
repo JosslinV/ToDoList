@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -27,6 +29,7 @@ public class Task {
 	@Column(name="timestamp_due")
 	private long timestampDue;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn (name="task_list_id",referencedColumnName="id",nullable=false,unique=true)
 	private TaskList mTaskList;

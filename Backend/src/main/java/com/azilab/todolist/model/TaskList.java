@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -30,8 +32,9 @@ public class TaskList {
 	@OneToMany(mappedBy="mTaskList")
 	private List<Task> lstOfTask;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn (name="user_id",referencedColumnName="id",nullable=false,unique=true)
+	@JoinColumn (name="user_id",referencedColumnName="id",nullable=false)
 	private User mUser;
 
 }
