@@ -1,0 +1,14 @@
+.taskarray{
+    position: absolute;
+    width: auto; height: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+    background: #f7d61a;
+    white-space: nowrap;
+}
+
+.scrollBar{
+    height:100%;
+    width:100%;
+    overflow-x: scroll;
+  }
